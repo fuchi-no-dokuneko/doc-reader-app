@@ -3,7 +3,6 @@ package app.docreader;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowInsets;
 import android.widget.*;
 
 final class AppShell {
@@ -20,6 +19,9 @@ final class AppShell {
             return insets;
         });
         int flags = Appearance.dark(activity) ? 0 : View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        if (Build.VERSION.SDK_INT >= 30) activity.getWindow().setDecorFitsSystemWindows(false);
+        else flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         activity.getWindow().getDecorView().setSystemUiVisibility(flags);
         LinearLayout toolbar = ui.row(); toolbar.setPadding(ui.dp(12), ui.dp(8), ui.dp(12), ui.dp(8));
         back = ui.button(R.string.library, false, activity::home);

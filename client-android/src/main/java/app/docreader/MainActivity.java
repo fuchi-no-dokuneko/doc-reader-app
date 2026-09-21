@@ -50,6 +50,8 @@ public final class MainActivity extends Activity {
             controller.importUri(data.getData(), data.getType());
     }
     private void back() { if (controller.reading()) home(); else finish(); }
+    // API 26–32 fallback; API 33+ uses the native dispatcher registered above.
+    @android.annotation.SuppressLint("GestureBackNavigation")
     @Override public void onBackPressed() { back(); }
     @Override protected void onSaveInstanceState(Bundle state) {
         controller.save();

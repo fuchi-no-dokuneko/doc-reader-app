@@ -10,3 +10,15 @@ and full Markdown tables/images/links are not implemented.
 Verification scope / 驗證範圍
 Build and focused host unit tests only; no emulator, adb, or device UAT requested.
 依要求僅建置並執行精簡主機單元測試，未進行模擬器、adb 或實機驗收。
+
+Scope question / 範圍待確認
+Jira UT-57 was discovered while looking for a commit ticket number.
+Its full PRD was not supplied in this request; confirmation is pending.
+查找提交票號時發現 UT-57；本次需求未提供其完整規格，目前仍待確認適用範圍。
+That PRD additionally requires EPUB/code formats, Chinese legacy encodings,
+virtualized 5,000+ pages, chapters/PDF link previews, split panes/tabs,
+three reading modes, sepia/typography controls, bookmarks/highlights,
+Kotlin MVVM, Room and DataStore. These are not delivered by this MVP.
+該規格另要求 EPUB／程式碼格式、傳統中文編碼、五千頁虛擬化、章節／PDF 連結預覽、
+分割畫面／分頁、三種閱讀模式、棕褐色與排版、書籤／標記、Kotlin MVVM、Room 及 DataStore。
+以上額外項目尚未包含於本初版，未宣告 UT-57 完成。

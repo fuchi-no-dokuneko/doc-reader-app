@@ -27,6 +27,7 @@ final class DocumentImport {
                 bytes = BoundedCopy.copy(input, output, format.limit());
             }
             if (format != DocFormat.PDF) TextDecoder.decode(java.nio.file.Files.readAllBytes(copy.toPath()));
+            if (Thread.currentThread().isInterrupted()) throw new IOException("Cancelled");
             Document doc = new Document(id, name, format, bytes);
             library.remember(doc);
             return doc;

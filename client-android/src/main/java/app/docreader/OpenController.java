@@ -8,6 +8,7 @@ final class OpenController {
     private final MainActivity activity;
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private ReaderScreen reader;
+    private Future<?> pending;
     private int generation;
     private boolean busy;
     Document document;
@@ -22,7 +23,7 @@ final class OpenController {
         clear(); busy = true;
         int request = generation;
         activity.shell.display(activity.getString(R.string.app_name), true, StatusScreen.loading(activity));
-        worker.submit(() -> {
+        pending = worker.submit(() -> {
             try {
                 Document doc = source.call();
                 String text = doc.format == DocFormat.PDF ? null
@@ -39,11 +40,8 @@ final class OpenController {
                 activity.runOnUiThread(() -> {
                     if (request != generation || activity.isDestroyed()) return;
                     busy = true;
-                    int message = error instanceof BoundedCopy.TooLarge ? R.string.file_limit
-                        : error instanceof IllegalArgumentException ? R.string.unsupported
-                        : error instanceof java.nio.charset.CharacterCodingException ? R.string.encoding_error : R.string.unreadable;
                     activity.shell.display(activity.getString(R.string.open_failed), true,
-                        StatusScreen.error(activity, message));
+                        StatusScreen.error(activity, StatusScreen.message(error)));
                 });
             }
         });
@@ -52,6 +50,7 @@ final class OpenController {
     void save() { if (reader != null) reader.save(); }
     void clear() {
         generation++; busy = false;
+        if (pending != null) { pending.cancel(true); pending = null; }
         if (reader != null) { reader.save(); reader.close(); reader = null; }
         document = null;
     }

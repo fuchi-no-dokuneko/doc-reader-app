@@ -23,6 +23,7 @@ final class PdfScreen implements ReaderScreen, PdfEngine.Listener {
         progress.setIndeterminate(true);
         root.addView(progress, new LinearLayout.LayoutParams(-1, ui.dp(3)));
         image = new ZoomPage(activity);
+        image.setTooltipText(activity.getString(R.string.pdf_hint));
         root.addView(image, new LinearLayout.LayoutParams(-1, 0, 1));
         controls = new PdfControls(activity, image, this::render, () -> page, () -> count);
         root.addView(controls.view);

@@ -5,6 +5,12 @@ import android.view.View;
 import android.widget.*;
 
 final class StatusScreen {
+    static int message(Exception error) {
+        if (error instanceof BoundedCopy.TooLarge) return R.string.file_limit;
+        if (error instanceof IllegalArgumentException) return R.string.unsupported;
+        if (error instanceof java.nio.charset.CharacterCodingException) return R.string.encoding_error;
+        return R.string.unreadable;
+    }
     static LinearLayout panel(MainActivity activity) {
         LinearLayout body = activity.ui.column();
         body.setGravity(Gravity.CENTER);
