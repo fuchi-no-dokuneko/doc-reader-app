@@ -1,0 +1,11 @@
+.local-tool/
+**/.local-tool-app/
+**/.gradle/
+**/build/
+**/data/
+local.properties
+fan-in/
+fan-out/
+dev-log/
+*.iml
+.idea/

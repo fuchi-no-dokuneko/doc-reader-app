@@ -1,0 +1,12 @@
+MVP scope / 首版範圍
+PDF, TXT, and basic Markdown; no additional format selection received.
+PDF、TXT 與基本 Markdown；尚未收到其他格式選擇。
+
+Optional future work / 可選後續功能
+Office DOC/DOCX/XLS/PPT formats, PDF passwords, PDF text search/selection,
+and full Markdown tables/images/links are not implemented.
+尚未實作 Office 格式、PDF 密碼、PDF 文字搜尋／選取，以及完整 Markdown 表格／圖片／連結。
+
+Verification scope / 驗證範圍
+Build and focused host unit tests only; no emulator, adb, or device UAT requested.
+依要求僅建置並執行精簡主機單元測試，未進行模擬器、adb 或實機驗收。
