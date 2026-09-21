@@ -13,5 +13,8 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     lint { abortOnError true }
+    testOptions {
+        unitTests.all { inputs.file('src/main/AndroidManifest.xml') }
+    }
 }
 dependencies { testImplementation 'junit:junit:4.13.2' }

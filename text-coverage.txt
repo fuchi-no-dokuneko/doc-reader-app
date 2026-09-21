@@ -1,0 +1,4 @@
+DocumentTest: format recognition, text decoder, bounded stream copy; no mocks. 文件格式、文字解碼與限量串流；無模擬模組。
+NavigationTest: text search and page-position logic; no mocks. 文字搜尋及頁碼邏輯；無模擬模組。
+ManifestTest: actual Android manifest intent declarations; no mocks, no Android runtime execution. 實際意圖宣告；無模擬模組，未執行 Android 執行環境。
+Device UI, PDF native rendering, and external-provider interaction are not runtime-tested. 未於實機執行介面、PDF 原生繪圖與外部提供者互動測試。
