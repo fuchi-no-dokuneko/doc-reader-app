@@ -1,0 +1,22 @@
+Required UI and architecture / 必要介面與架構
+Continued from requirements.txt / 接續 requirements.txt。
+
+R10 Multiple tabs, same document in two tabs, left/right split panes.
+多分頁、同文件不同位置與左右分割畫面。
+R11 Light/dark/sepia; font family/size/line height/margins; background reflow.
+淺色／深色／棕褐色；字型／字級／行高／邊距與背景重排。
+R12 Continuous scroll with floating draggable progress scrollbar.
+連續垂直捲動與可拖曳浮動進度條。
+R13 Instant paged mode: thirds tap previous/toggle bars/next; no animations.
+無動畫即時翻頁；左／中／右三區控制上一頁／工具列／下一頁。
+R14 Jump to page and +/- K pages (default 10); central reading-mode menu.
+指定頁碼、正負 K 頁跳轉（預設 10）與集中閱讀模式選單。
+R15 Per-document/tab exact page and scroll offset; Room bookmarks/highlights.
+各文件／分頁位置與捲動量；Room 保存書籤及標記。
+R16 DataStore preferences; Kotlin MVVM/domain-data-UI separation; API 26+.
+DataStore 設定、Kotlin MVVM 分層，以及 Android 8.0 以上。
+R17 Local processing/state; Google platform/AndroidX dependencies only.
+本機處理與保存；使用 Google 平台及 AndroidX 相依套件。
+R18 Friendly picker, external file-manager opening/sharing; build/minimal
+meaningful unit tests; no emulator or adb. APK/report in fan-out.
+友善選擇器、外部開啟／分享、建置與精簡有效測試；不執行模擬器或 adb。
