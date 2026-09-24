@@ -1,7 +1,0 @@
-<resources>
-    <string name="fit_page">Fit page</string>
-    <string name="zoom_out">Zoom out</string>
-    <string name="zoom_in">Zoom in</string>
-    <string name="text_size">Text size</string>
-    <string name="encoding_error">This text encoding is not supported. Save the file as UTF-8 or UTF-16 and try again.</string>
-</resources>
