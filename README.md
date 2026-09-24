@@ -1,47 +1,52 @@
 # Doc Reader · 文件閱讀器 · 文件阅读器
 
-An offline Android reader for PDF, TXT, and basic Markdown. Open documents
-inside the app, tap them in a file manager, or share them to Doc Reader.
-Android 8.0 and newer. No account or network permission.
+Offline Android reader, Android 8.0+. Kotlin MVVM, Room and DataStore.
+No account or network permission. Open files in the app or from a file manager.
 
-離線 Android 閱讀器，支援 PDF、TXT 與基本 Markdown。可在應用程式內選取文件，
-或從檔案管理員點選／分享至 Doc Reader。支援 Android 8.0 以上，無須帳號或網路權限。
+離線 Android 閱讀器，支援 Android 8.0 以上；採用 Kotlin MVVM、Room、DataStore。
+無須帳號或網路權限，可從應用程式或檔案管理員開啟文件。
 
-离线 Android 阅读器，支持 PDF、TXT 与基本 Markdown。可在应用内选择文件，
-或从文件管理器点击／分享至 Doc Reader。支持 Android 8.0 以上，无需账号或网络权限。
+离线 Android 阅读器，支持 Android 8.0 以上；采用 Kotlin MVVM、Room、DataStore。
+无需账号或网络权限，可从应用或文件管理器打开文档。
+
+## Formats · 格式 · 格式
+
+PDF (passwords, selection, search, link previews), EPUB with CSS,
+Markdown, Jupyter `.ipynb` / `.ipybn`, DOC/DOCX, XLS/XLSX, PPT/PPTX,
+RTF, CSV, JSON/JSONL, YAML, `.config`, dotfiles and common source languages.
+Office files use a content reading view. Notebooks show cells and saved outputs.
+
+支援上述格式、中文編碼偵測與手動選擇。Office 以內容閱讀檢視呈現；
+筆記本顯示儲存格與已保存輸出，程式碼支援上色及結構折疊。
+
+支持上述格式、中文编码检测与手动选择。Office 以内容阅读视图呈现；
+笔记本显示单元格与已保存输出，代码支持着色及结构折叠。
+
+## Reading · 閱讀 · 阅读
+
+Independent tabs, split panes, scroll/paged/precision modes, page jumps,
+light/dark/sepia themes, typography, chapters, bookmarks and highlights.
+Long-press a PDF internal link for a preview. Tap a source structure to fold it.
+Select Reading → Linked images to grant access to a Markdown image folder.
+
+獨立分頁、左右分割、三種閱讀模式、跳頁、主題、排版、章節、書籤與標記。
+長按 PDF 內部連結預覽；點選程式結構折疊。閱讀選單可授權連結圖片資料夾。
+
+独立分页、左右分割、三种阅读模式、跳页、主题、排版、章节、书签与标记。
+长按 PDF 内部链接预览；点击代码结构折叠。阅读菜单可授权链接图片文件夹。
 
 ## Build · 建置 · 构建
 
 ```bash
 ./install-local-build.sh
-./gradlew :client-android:assembleDebug :client-android:testDebugUnitTest
+./gradlew :client-android:assembleDebug :client-android:testDebugUnitTest :client-android:lintDebug
 ```
 
 APK: `client-android/build/outputs/apk/debug/client-android-debug.apk`
 
-Setup reuses installed tools. Missing tools and build caches stay in the repo.
-The administrative Ubuntu installer is provided for manual use; it is not run
-by local setup. See [build notes](client-android/doc/build.md).
+Tools/caches stay local to the repo; installed tools may be reused.
+Host tests require no emulator or adb. See [build notes](client-android/doc/build.md)
+and [verification](client-android/doc/verification.txt).
 
-優先使用現有工具；缺少的工具與建置快取留在專案內。Ubuntu 管理員安裝腳本僅供手動執行。
-
-优先使用现有工具；缺少的工具与构建缓存留在项目内。Ubuntu 管理员安装脚本仅供手动执行。
-
-## Reading · 閱讀 · 阅读
-
-PDF: page navigation, page jump, pinch/double-tap zoom. Text: selection, search,
-font size. Both: remembered position and system/light/dark appearance.
-The 12 most recent files are copied into private app storage for offline use.
-Removing a reading copy leaves the original unchanged.
-
-PDF 支援換頁、跳頁與縮放；文字支援選取、搜尋與字級調整。兩者均記憶閱讀位置，
-並支援系統／淺色／深色外觀。最近 12 份文件保存於應用程式私人空間，移除副本不影響原檔。
-
-PDF 支持翻页、跳页与缩放；文字支持选择、搜索与字号调整。两者均记忆阅读位置，
-并支持系统／浅色／深色外观。最近 12 份文件保存在应用私有空间，移除副本不影响原文件。
-
-Limits: PDF 50 MB; UTF-8/UTF-16 text 4 MB. See `todo.txt` for format limits.
-
-限制：PDF 50 MB；UTF-8／UTF-16 文字 4 MB。格式限制請見 `todo.txt`。
-
-限制：PDF 50 MB；UTF-8／UTF-16 文本 4 MB。格式限制请见 `todo.txt`。
+工具／快取置於專案，可沿用已安裝工具；主機測試不需模擬器或 adb。
+工具／缓存放在项目中，可复用已安装工具；主机测试无需模拟器或 adb。

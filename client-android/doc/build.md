@@ -1,7 +1,7 @@
 # Build notes · 建置說明 · 构建说明
 
 Pinned build tools: Gradle 9.5.1, Android Gradle Plugin 9.2.0, SDK 36,
-build-tools 36.0.0; Java 21 on this PC. App-specific installations and caches
+build-tools 36.0.0; Kotlin 2.3.20, KSP 2.3.10; Java 21 on this PC. App-specific installations and caches
 live in `client-android/.local-tool-app`; shared fallback Java lives in
 `.local-tool`. Setup uses IPv4 and never invokes sudo.
 
@@ -20,7 +20,9 @@ live in `client-android/.local-tool-app`; shared fallback Java lives in
 
 The Ubuntu system-package script is optional and must be reviewed and run
 manually with sudo by the administrator. It has not been executed here.
-No emulator or adb is required for these commands.
+No emulator or adb is required. JUnit and Robolectric run on the host JVM.
+Robolectric reuses a local SDK jar when available; otherwise its Maven cache
+is inside `.local-tool-app/maven`. PDFium test fixtures retain their licenses.
 
 Ubuntu 系統套件腳本為選用，須由管理員檢閱後手動以 sudo 執行，本次未執行。
 以上指令不需模擬器或 adb。

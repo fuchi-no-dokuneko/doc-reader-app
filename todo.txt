@@ -1,24 +1,32 @@
-MVP scope / 首版範圍
-PDF, TXT, and basic Markdown; no additional format selection received.
-PDF、TXT 與基本 Markdown；尚未收到其他格式選擇。
+UT-57 implementation checklist / UT-57 實作清單
+[x] R01 PDF rendering, passwords, selection, search / PDF 閱讀與文字功能
+[x] R02 EPUB/CSS and rich Markdown / EPUB 與 Markdown
+[x] R03 Source/config highlighting, indentation, folding / 原始碼與設定檔
+[x] R04 Jupyter ipynb/ipybn cells and saved outputs / 筆記本與已存輸出
+[x] R05 DOC/DOCX/XLS/XLSX/PPT/PPTX content / 六種 Office 格式
+[x] R06 Automatic Chinese encoding and saved overrides / 中文編碼
+[x] R07 Disk indexing, background layout, five-page window, bitmap LRU
+    磁碟索引、背景分頁、五頁視窗與限量快取
+[x] R08 Widow/orphan handling, atomic images/rows, headers/footers
+    孤行、圖片／表格列、頁首頁尾
+[x] R09 Chapters and long-press PDF link previews / 章節與連結預覽
+[x] R10 Independent tabs and left/right split / 分頁與分割窗格
+[x] R11 Themes, font, size, line height, margins / 主題與排版
+[x] R12 Continuous scrolling and draggable progress rail / 連續捲動
+[x] R13 Instant paged mode and thirds tapping / 無動畫三區翻頁
+[x] R14 Page jump, configurable +/-K, central mode menu / 精準跳頁
+[x] R15 Positions, Room bookmarks/highlights / 位置、書籤與標記
+[x] R16 Kotlin MVVM, Room, DataStore, API 26+ / Kotlin 架構
+[x] R17 Local processing; Android/AndroidX runtime with Kotlin dependencies
+    本機處理、官方平台與 AndroidX，含 Kotlin 執行依賴
+[x] R18 File-manager opening/sharing, APK build and host tests / 外部開檔與建置
 
-Optional future work / 可選後續功能
-Office DOC/DOCX/XLS/PPT formats, PDF passwords, PDF text search/selection,
-and full Markdown tables/images/links are not implemented.
-尚未實作 Office 格式、PDF 密碼、PDF 文字搜尋／選取，以及完整 Markdown 表格／圖片／連結。
+Verification details: client-android/doc/verification.txt
+驗證與實際測試界線見上列文件。未以實作清單宣稱已完成實機驗收。
 
-Verification scope / 驗證範圍
-Build and focused host unit tests only; no emulator, adb, or device UAT requested.
-依要求僅建置並執行精簡主機單元測試，未進行模擬器、adb 或實機驗收。
-
-Scope question / 範圍待確認
-Jira UT-57 was discovered while looking for a commit ticket number.
-Its full PRD was not supplied in this request; confirmation is pending.
-查找提交票號時發現 UT-57；本次需求未提供其完整規格，目前仍待確認適用範圍。
-That PRD additionally requires EPUB/code formats, Chinese legacy encodings,
-virtualized 5,000+ pages, chapters/PDF link previews, split panes/tabs,
-three reading modes, sepia/typography controls, bookmarks/highlights,
-Kotlin MVVM, Room and DataStore. These are not delivered by this MVP.
-該規格另要求 EPUB／程式碼格式、傳統中文編碼、五千頁虛擬化、章節／PDF 連結預覽、
-分割畫面／分頁、三種閱讀模式、棕褐色與排版、書籤／標記、Kotlin MVVM、Room 及 DataStore。
-以上額外項目尚未包含於本初版，未宣告 UT-57 完成。
+Delivery blocker / 交付阻礙:
+GitHub's saved credential returns HTTP 401 Bad credentials.
+The local APK and committed source can be delivered; remote push needs a
+refreshed GitHub login. This is a publishing blocker, not deferred app work.
+GitHub 已存憑證回覆 401；本機 APK 與提交可交付，遠端推送需更新登入。
+此為發布驗證阻礙，並非延後應用程式功能。
