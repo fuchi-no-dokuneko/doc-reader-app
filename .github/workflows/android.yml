@@ -1,0 +1,31 @@
+name: Android build and host tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build APK and run host checks
+        shell: bash
+        run: |
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          ./install-local-build.sh
+          ./gradlew :client-android:assembleDebug :client-android:testDebugUnitTest :client-android:lintDebug
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: doc-reader-apk-and-checks
+          path: |
+            client-android/build/outputs/apk/debug/*.apk
+            client-android/build/reports/tests/testDebugUnitTest/
+            client-android/build/reports/lint-results-debug.html
+          retention-days: 14
