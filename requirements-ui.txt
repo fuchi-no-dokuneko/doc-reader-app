@@ -20,3 +20,9 @@ R17 Local processing/state; Google platform/AndroidX dependencies only.
 R18 Friendly picker, external file-manager opening/sharing; build/minimal
 meaningful unit tests; no emulator or adb. APK/report in fan-out.
 友善選擇器、外部開啟／分享、建置與精簡有效測試；不執行模擬器或 adb。
+
+R19 Repair EPUB opening on Android; retain chapters, styles, links and images.
+修復 Android EPUB 開啟，保留章節、樣式、連結及圖片。
+R20 Programming/config files enter an edit mode with visibly different colors,
+live syntax highlighting, save/export and unsaved-change handling.
+程式／設定檔可進入不同配色的編輯模式，支援即時上色、儲存／匯出與未存變更處理。

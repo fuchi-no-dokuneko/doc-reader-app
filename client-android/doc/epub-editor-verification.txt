@@ -1,0 +1,40 @@
+EPUB and editor verification / EPUB 與編輯驗證 · 2026-09-27
+Version / 版本: 1.0.1 (2), Android 8.0/API 26+
+
+EPUB root cause / EPUB 根因:
+Android's Harmony XML factory rejected external-general-entities before
+reading container.xml. The earlier desktop-only parser test missed this.
+Unsupported optional features now fall back to an empty external-entity
+resolver; EPUB 2 NCX/DTDs and EPUB 3 packages can be opened locally.
+Android XML 工廠拒絕設定而無法讀取；已改為相容設定及空外部實體解析器。
+支援 EPUB 2 NCX／DTD 及 EPUB 3，並更新快取版本以重新建立舊索引。
+
+EpubAndroidTest reproduced the original exception, then passed the fix.
+EpubCompatibilityTest covers prefixed XHTML, UTF-16, encoded paths,
+chapter order, NCX titles, relative links and SVG cover-image references.
+EpubReaderFlowTest imports, paginates and renders the final page in the app.
+已重現原始例外並通過修正；涵蓋命名空間、編碼、路徑、章節、連結及圖片。
+主機上的實際 Activity 流程驗證了匯入、分頁及最後一頁的文字呈現。
+
+Additional local publication: Project Gutenberg ebook 11 EPUB 3,
+https://www.gutenberg.org/ebooks/11.epub3.images
+Android parser read 895 blocks, 163,529 characters and its local cover image.
+另以 Gutenberg 實際 EPUB 驗證 895 區塊、163,529 字元及封面圖片。
+DOC_READER_EPUB supplies this optional local fixture; CI uses fixed regressions.
+此本機額外樣本由環境變數指定；CI 使用固定回歸樣本。
+
+EditorFlowTest: UI edit button, distinct color, live spans without moving
+the cursor, saving original bytes, both tabs refreshed and new index read.
+EditorSaveAsTest: read-only input, native picker, cancel and successful copy.
+EditorSessionTest: retained draft after rotation, Back prompt, discard,
+and distinct accessible colors in every reading theme.
+EditorConflictTest: external changes survive failed save; draft stays editable.
+SourceTextTest: BOM/UTF-8/UTF-16/GBK/Big5, exact whitespace and line endings,
+and rejection of lossy encoding. SyntaxTest covers comments, strings, keywords,
+numbers, incomplete input, cancellation and a 100,000-character string.
+編輯測試驗證即時上色、游標、原檔／副本、雙分頁更新、旋轉及未存變更處理；
+亦驗證檔案衝突、中文編碼、BOM、換行及大型字串，不以替換字元破壞內容。
+
+Build + 39 host tests passed; lint 0 errors / 47 warnings. APK signature verified.
+建置與 39 項主機測試通過，Lint 無錯誤、47 項警告；已驗證 APK 簽章。
+No emulator, adb or physical-device UAT. 未執行模擬器、adb 或實機驗收。

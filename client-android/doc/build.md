@@ -21,6 +21,7 @@ live in `client-android/.local-tool-app`; shared fallback Java lives in
 The Ubuntu system-package script is optional and must be reviewed and run
 manually with sudo by the administrator. It has not been executed here.
 No emulator or adb is required. JUnit and Robolectric run on the host JVM.
+Host test classes use separate JVMs to isolate Android/DataStore static state.
 Robolectric reuses a local SDK jar when available; otherwise its Maven cache
 is inside `.local-tool-app/maven`. PDFium test fixtures retain their licenses.
 

@@ -1,6 +1,6 @@
 UT-57 host-test coverage / UT-57 主機測試覆蓋
-26 tests pass; zero failures, errors or skips.
-26 項測試通過，無失敗、錯誤或略過。
+39 tests pass; zero failures, errors or skips.
+39 項測試通過，無失敗、錯誤或略過。
 
 TextFormatsTest, EncodingTest, NotebookTest, EpubTest:
 source/config, Markdown, JSONL, CSV, Chinese encodings, notebooks and EPUB.
@@ -29,3 +29,6 @@ JUnit／Robolectric 於主機 JVM 執行；未執行模擬器、adb 或實機驗
 未量測實機手勢、效能及完整視覺保真度。
 See client-android/doc/verification.txt for requirement mapping.
 需求對應見 client-android/doc/verification.txt。
+EPUB/parser/UI and editing regressions are detailed in
+client-android/doc/epub-editor-verification.txt.
+EPUB／解析器／介面及編輯回歸測試詳見上列補充文件。
