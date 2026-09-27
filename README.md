@@ -3,6 +3,9 @@
 Offline Android reader, Android 8.0+. Kotlin MVVM, Room and DataStore.
 No account or network permission. Open files in the app or from a file manager.
 
+[Project page](https://fuchi-no-dokuneko.github.io/doc-reader-app/) ·
+[Releases](https://github.com/fuchi-no-dokuneko/doc-reader-app/releases)
+
 離線 Android 閱讀器，支援 Android 8.0 以上；採用 Kotlin MVVM、Room、DataStore。
 無須帳號或網路權限，可從應用程式或檔案管理員開啟文件。
 

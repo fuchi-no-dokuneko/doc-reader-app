@@ -3,6 +3,12 @@ plugins {
     id 'com.google.devtools.ksp'
 }
 
+def releaseKeystoreFile = System.getenv('ANDROID_KEYSTORE_FILE')
+def releaseKeystorePassword = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+def releaseKeyAlias = System.getenv('ANDROID_KEY_ALIAS')
+def releaseKeyPassword = System.getenv('ANDROID_KEY_PASSWORD')
+def releaseSigningReady = releaseKeystoreFile && releaseKeystorePassword && releaseKeyAlias && releaseKeyPassword
+
 android {
     namespace 'app.docreader'
     compileSdk 36
@@ -10,10 +16,27 @@ android {
         applicationId 'app.docreader'
         minSdk 26
         targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+    signingConfigs {
+        if (releaseSigningReady) {
+            release {
+                storeFile file(releaseKeystoreFile)
+                storePassword releaseKeystorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (releaseSigningReady) signingConfig signingConfigs.release
+        }
     }
     lint { abortOnError true }
     testOptions {

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Doc Reader is a private, offline Android document reader for PDFs, ebooks, Office files, notebooks, and text formats.">
+  <title>Doc Reader · Offline Android document reading</title>
+  <style>
+    :root { color-scheme: light dark; --ink: #172033; --muted: #566077; --paper: #f7f4ec; --card: #fffdf8; --accent: #3957d7; --line: #d9d6cc; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #edf1ff; --muted: #b9c1d6; --paper: #10131b; --card: #191e2a; --accent: #9aafff; --line: #343b4d; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.65 system-ui, sans-serif; }
+    main { width: min(960px, calc(100% - 32px)); margin: auto; padding: 72px 0; }
+    header { max-width: 760px; }
+    .eyebrow { color: var(--accent); font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: .2em 0; font-size: clamp(3rem, 9vw, 6.5rem); line-height: .95; letter-spacing: -.055em; }
+    .lead { color: var(--muted); font-size: 1.25rem; max-width: 680px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 54px; }
+    .button { border: 1px solid var(--ink); border-radius: 999px; color: var(--paper); background: var(--ink); padding: 11px 20px; text-decoration: none; font-weight: 700; }
+    .button.secondary { color: var(--ink); background: transparent; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    article { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+    article h2 { margin-top: 0; font-size: 1.1rem; }
+    article p { color: var(--muted); margin-bottom: 0; }
+    footer { color: var(--muted); border-top: 1px solid var(--line); margin-top: 56px; padding-top: 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">Android 8.0+ · Offline by design</div>
+      <h1>Doc Reader</h1>
+      <p class="lead">Read documents without an account, an upload, or a network permission. Open local files in a focused multi-tab and split-pane workspace.</p>
+      <div class="actions">
+        <a class="button" href="https://github.com/fuchi-no-dokuneko/doc-reader-app/releases">Download a release</a>
+        <a class="button secondary" href="https://github.com/fuchi-no-dokuneko/doc-reader-app">View source</a>
+      </div>
+    </header>
+    <section class="grid" aria-label="Highlights">
+      <article><h2>Broad format support</h2><p>PDF, EPUB, Markdown, notebooks, Word, Excel, PowerPoint, RTF, CSV, JSON, YAML, source code, and plain text.</p></article>
+      <article><h2>Made for long reading</h2><p>Independent tabs, split panes, page jumps, search, bookmarks, highlights, themes, typography, and reading modes.</p></article>
+      <article><h2>Private and local</h2><p>No account and no network permission. Documents remain on the device and can be opened from a file manager.</p></article>
+    </section>
+    <footer>文件閱讀器 · 文件阅读器 · Open source on GitHub</footer>
+  </main>
+</body>
+</html>
