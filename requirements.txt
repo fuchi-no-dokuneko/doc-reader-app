@@ -1,0 +1,25 @@
+UT-57 + requested TODO completion / UT-57 與本次完整需求
+All items are required; no optional-feature reclassification.
+全部均為必要項目，不再改列為可選功能。
+Continued in requirements-ui.txt / 續見 requirements-ui.txt。
+
+R01 PDF native rendering, password opening, text selection/search.
+PDF 原生繪圖、密碼開啟、文字選取／搜尋。
+R02 EPUB reflow with CSS; Markdown headings/lists/code/images/tables/links.
+EPUB 重排與 CSS；Markdown 標題、清單、程式碼、圖片、表格、連結。
+R03 JSON/YAML/JSONL/SQL and common source/config files: highlighting,
+indentation and collapsible structure. Include .config/.yaml and dotfiles.
+JSON／YAML／JSONL／SQL、常見原始碼及設定檔：語法上色、縮排、結構折疊。
+R04 .ipynb notebooks: Markdown/code cells, saved text/HTML/image outputs.
+Jupyter 筆記本：Markdown／程式碼儲存格與已保存的文字／HTML／圖片輸出。
+R05 DOC/DOCX/XLS/XLSX/PPT/PPTX document content and spreadsheet tables.
+Office 舊版及 Open XML 文件內容與試算表表格。
+R06 Auto-detect UTF-8/GBK/GB2312/GB18030/Big5; persistent manual override.
+自動判斷指定中文編碼，並保存手動覆寫設定。
+R07 5,000+ pages; streaming indexing; only current page plus 1–2 on each
+side in memory; background measurement/pagination; bounded bitmap LRU.
+五千頁以上串流索引；僅保留當頁與前後一至兩頁；背景量測與限量快取。
+R08 Widow/orphan handling; keep images/table rows together; page headers/footers.
+孤行處理、圖片／表格列完整分頁，以及頁首頁尾。
+R09 Chapters; hold internal PDF links to preview before jumping.
+章節導覽；長按 PDF 內部連結先預覽再跳轉。

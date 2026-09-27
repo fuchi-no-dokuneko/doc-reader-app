@@ -3,6 +3,7 @@
 **/.gradle/
 **/build/
 **/data/
+!client-android/src/main/kotlin/app/docreader/data/
 local.properties
 fan-in/
 fan-out/

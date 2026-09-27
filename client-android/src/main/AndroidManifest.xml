@@ -15,33 +15,21 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="content" />
                 <data android:scheme="file" />
-                <data android:mimeType="application/pdf" />
-                <data android:mimeType="text/plain" />
-                <data android:mimeType="text/markdown" />
-                <data android:mimeType="text/x-markdown" />
-                <data android:mimeType="application/octet-stream" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="file" />
-                <data android:host="*" />
-                <data android:pathPattern=".*\\.pdf" />
-                <data android:pathPattern=".*\\.txt" />
-                <data android:pathPattern=".*\\.md" />
-                <data android:pathPattern=".*\\.markdown" />
-                <data android:pathPattern=".*\\.PDF" />
-                <data android:pathPattern=".*\\.TXT" />
-                <data android:pathPattern=".*\\.MD" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="application/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="application/pdf" />
-                <data android:mimeType="text/plain" />
-                <data android:mimeType="text/markdown" />
-                <data android:mimeType="text/x-markdown" />
-                <data android:mimeType="application/octet-stream" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="application/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
             </intent-filter>
         </activity>
     </application>

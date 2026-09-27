@@ -1,0 +1,37 @@
+UT-57 verification / UT-57 驗證
+Command / 指令:
+./gradlew --offline :client-android:testDebugUnitTest :client-android:assembleDebug :client-android:lintDebug
+
+26 host tests pass; zero failures, errors or skipped tests.
+26 項主機測試通過，無失敗、錯誤或略過。
+Lint: zero errors, 37 warnings about SDK age, inlined constants,
+programmatic-view constructors, style/accessibility suggestions and strings.
+Lint 無錯誤、37 項警告，為 SDK 年代、常數、程式建立的介面、風格與字串等建議。
+
+Evidence / 證據:
+R01: PdfTest uses independent PDFium fixtures: plain/split streams, R2/R3/
+R5/R6 user+owner passwords, wrong password, unlocked-copy text round trips.
+PDFium 原始測試樣本涵蓋明文、多串流、四種加密版本、錯誤密碼及解密副本。
+R02–R06: TextFormatsTest, EncodingTest, NotebookTest, OfficeXmlTest,
+LegacyOfficeTest, PresentationTest, EpubTest cover source/config, Markdown,
+JSONL, CSV, saved notebook outputs, six Office formats and Chinese encodings.
+格式測試涵蓋程式／設定檔、Markdown、筆記本、Office、EPUB 與中文編碼。
+R07–R08: PaginationTest verifies a 6,001-page disk index and widow/orphan,
+heading and folding rules. AndroidReadingTest measures 6,000 long blocks
+with native StaticLayout, exceeds 5,000 pages and verifies font-size reflow.
+磁碟索引、孤行、標題與折疊規則已測試；原生文字量測驗證五千頁以上與字級重排。
+R10–R16: ActivityFlowTest opens the same file in two panes and checks
+independent positions; AndroidReadingTest reopens Room and reads saved
+positions/highlights plus DataStore mode/theme/jump/encoding preferences.
+雙窗格位置、Room 重新開啟後資料與 DataStore 設定已驗證。
+R18: ManifestContractTest checks VIEW/SEND, untyped-file handling,
+exported singleTop activity and absence of network permission.
+外部開檔、分享及無網路權限的宣告已驗證。
+
+Boundaries / 驗證界線:
+Host tests and build/lint only. No emulator, adb or physical-device UAT.
+Device frame rate, touch feel and full visual fidelity are not measured.
+依要求未執行模擬器、adb 或實機驗收；未量測實機幀率、觸控手感及完整視覺保真度。
+Office is a content reader; notebooks display saved outputs; scanned PDFs
+without text layers do not acquire text through OCR.
+Office 為內容閱讀器，筆記本顯示已存輸出；純掃描 PDF 不會自行產生 OCR 文字層。

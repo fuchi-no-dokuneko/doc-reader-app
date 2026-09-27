@@ -1,4 +1,31 @@
-DocumentTest: format recognition, text decoder, bounded stream copy; no mocks. 文件格式、文字解碼與限量串流；無模擬模組。
-NavigationTest: text search and page-position logic; no mocks. 文字搜尋及頁碼邏輯；無模擬模組。
-ManifestTest: actual Android manifest intent declarations; no mocks, no Android runtime execution. 實際意圖宣告；無模擬模組，未執行 Android 執行環境。
-Device UI, PDF native rendering, and external-provider interaction are not runtime-tested. 未於實機執行介面、PDF 原生繪圖與外部提供者互動測試。
+UT-57 host-test coverage / UT-57 主機測試覆蓋
+26 tests pass; zero failures, errors or skips.
+26 項測試通過，無失敗、錯誤或略過。
+
+TextFormatsTest, EncodingTest, NotebookTest, EpubTest:
+source/config, Markdown, JSONL, CSV, Chinese encodings, notebooks and EPUB.
+程式與設定檔、Markdown、JSONL、CSV、中文編碼、筆記本及 EPUB。
+OfficeXmlTest, LegacyOfficeTest, PresentationTest:
+DOC/DOCX/XLS/XLSX/PPT/PPTX content plus RTF Unicode/Chinese text.
+六種 Office 內容以及 RTF Unicode／中文文字。
+PdfTest: independent PDFium fixtures, text, split streams, R2/R3/R5/R6
+user/owner passwords, wrong passwords and unlocked-copy round trips.
+PDFium 獨立樣本、文字、多串流、密碼驗證與解密副本往返。
+PaginationTest: 6,001-page disk index, widow/orphan rules and folding.
+磁碟頁面索引、孤行處理與折疊。
+AndroidReadingTest: native StaticLayout on 6,000 long blocks, 5,000+ pages,
+font-size reflow, reopened Room positions/highlights and DataStore settings.
+原生文字分頁、大型文件、字級重排、Room 重開資料與 DataStore 設定。
+ActivityFlowTest: two panes of one document keep independent positions.
+同文件兩窗格保留獨立位置。
+SearchTest: find-next advances within and across text blocks.
+搜尋下一筆可在同一文字區塊及跨區塊前進。
+ManifestContractTest: VIEW/SEND, untyped files, singleTop/exported activity,
+no INTERNET permission. 外部開啟、分享、無類型檔案與無網路權限。
+
+JUnit and Robolectric run on the host JVM. No emulator, adb or device UAT.
+Real-device gestures, performance and full visual fidelity remain unmeasured.
+JUnit／Robolectric 於主機 JVM 執行；未執行模擬器、adb 或實機驗收。
+未量測實機手勢、效能及完整視覺保真度。
+See client-android/doc/verification.txt for requirement mapping.
+需求對應見 client-android/doc/verification.txt。

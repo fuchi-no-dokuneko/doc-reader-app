@@ -1,0 +1,25 @@
+PDFium test fixtures / PDFium 測試樣本
+Source: https://pdfium.googlesource.com/pdfium/+/main/testing/resources/
+Downloaded 2026-09-24. Unmodified fixtures. 原始檔案未修改。
+LICENSE-1.txt through LICENSE-5.txt concatenate to the original LICENSE.
+將 LICENSE-1.txt 至 LICENSE-5.txt 依序連接，即為完整原始授權。
+Source license: https://pdfium.googlesource.com/pdfium/+/main/LICENSE
+
+encrypted_hello_world_r2.pdf
+Git blob: 79ebbdc3705e56e714bde2091870b544b63a1fe2
+SHA-256: 267945749086981b8727c4931cfc8a24973c3aa5819ea8a392fa8bd0d637ee84
+encrypted_hello_world_r3.pdf
+Git blob: d74f05e71f209cbf22ecd4b18c7e4636803e9992
+SHA-256: cdbfd4f6728786dc70c7514bd5c669a38b03bba38be3e91ec46ccb02168b9ad3
+encrypted_hello_world_r5.pdf
+Git blob: 82c550e4324e75cfa578a3219b5eabe8c477e496
+SHA-256: 9f2bdfbbd675fcaa40e89240f4f66be81621afa33114d24e8f568fb727ad37d9
+encrypted_hello_world_r6.pdf
+Git blob: b507a151f778ee83040340d652bf048f247b5cda
+SHA-256: a5bcee67d2731547d8e6956cbb0d41eddeef4ca80c378c9dba8bc97961ece064
+hello_world.pdf
+Git blob: 48c714b64b9f28eadb96154f3d4b4dade092154d
+SHA-256: 1e06a6e12329f0c3760680a70baea126e040e66e0bf34d3b14a71863096ee1e3
+hello_world_2_pages_split_streams.pdf
+Git blob: 3ac829fcb0e31f63af94caddcfd35af261d21590
+SHA-256: 7d76940ed6b2dab938c6883985dae78491fb1c006642d1acb010cd133fa818d4
