@@ -25,8 +25,7 @@ jobs:
           java-version: "21"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
-      - name: Prepare optional release signing
-        id: signing
+      - name: Prepare required release signing
         shell: bash
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -35,21 +34,14 @@ jobs:
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          configured=0
           for value in "$KEYSTORE_BASE64" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD"; do
-            if [ -n "$value" ]; then configured=$((configured + 1)); fi
+            if [ -z "$value" ]; then
+              echo "All Android signing secrets are required for a publishable release." >&2
+              exit 1
+            fi
           done
-          if [ "$configured" -ne 0 ] && [ "$configured" -ne 4 ]; then
-            echo "Android signing secrets are only partially configured." >&2
-            exit 1
-          fi
-          if [ "$configured" -eq 4 ]; then
-            printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/doc-reader-release.keystore"
-            echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/doc-reader-release.keystore" >> "$GITHUB_ENV"
-            echo "configured=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-          fi
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/doc-reader-release.keystore"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/doc-reader-release.keystore" >> "$GITHUB_ENV"
       - name: Build and test release
         shell: bash
         env:
@@ -62,8 +54,6 @@ jobs:
           ./gradlew :client-android:testDebugUnitTest :client-android:lintDebug :client-android:assembleRelease :client-android:bundleRelease
       - name: Prepare release files
         shell: bash
-        env:
-          SIGNED: ${{ steps.signing.outputs.configured }}
         run: |
           set -euo pipefail
           mkdir -p release
@@ -72,9 +62,8 @@ jobs:
           test "${#apk[@]}" -eq 1
           test "${#bundle[@]}" -eq 1
           version="${GITHUB_REF_NAME//\//-}"
-          if [ "$SIGNED" = "true" ]; then qualifier="signed"; else qualifier="unsigned"; fi
-          cp "${apk[0]}" "release/doc-reader-${version}-${qualifier}.apk"
-          cp "${bundle[0]}" "release/doc-reader-${version}-${qualifier}.aab"
+          cp "${apk[0]}" "release/doc-reader-${version}-signed.apk"
+          cp "${bundle[0]}" "release/doc-reader-${version}-signed.aab"
           (cd release && sha256sum ./*.apk ./*.aab > SHA256SUMS.txt)
       - name: Upload build artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
