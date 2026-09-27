@@ -10,4 +10,4 @@ data class ReaderState(val library: List<DocumentInfo> = emptyList(),
     val tabs: List<ReaderTab> = emptyList(), val left: String? = null,
     val right: String? = null, val active: String? = null, val home: Boolean = true,
     val settings: ReadingSettings = ReadingSettings(), val message: String = "",
-    val importing: Boolean = false)
+    val importing: Boolean = false, val editor: EditSession? = null, val editBusy: String = "")

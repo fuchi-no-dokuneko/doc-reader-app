@@ -12,7 +12,8 @@ class DocumentImport(private val context: Context, private val repo: LocalReposi
     suspend fun open(uri: Uri, flags: Int = 0): DocumentInfo {
         val resolver = context.contentResolver
         if (flags and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION != 0) runCatching {
-            resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            resolver.takePersistableUriPermission(uri, flags and
+                (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION))
         }
         val title = if (uri.scheme == "file") File(uri.path.orEmpty()).name else
             resolver.query(uri,arrayOf(OpenableColumns.DISPLAY_NAME),null,null,null)?.use {
