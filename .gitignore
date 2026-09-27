@@ -1,6 +1,7 @@
 .local-tool/
 **/.local-tool-app/
 **/.gradle/
+**/.kotlin/
 **/build/
 **/data/
 !client-android/src/main/kotlin/app/docreader/data/

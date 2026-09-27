@@ -1,0 +1,21 @@
+android {
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            inputs.file('src/main/AndroidManifest.xml')
+            forkEvery = 1
+            maxParallelForks = 2
+            def epub = System.getenv('DOC_READER_EPUB')
+            if (epub) inputs.file(epub)
+        }
+        unitTests.all {
+            if (file('.local-tool-app/robolectric').listFiles()?.any { it.name.endsWith('.jar') }) {
+                systemProperty 'robolectric.offline', 'true'
+                systemProperty 'robolectric.dependency.dir', file('.local-tool-app/robolectric').absolutePath
+            } else {
+                systemProperty 'maven.repo.local', file('.local-tool-app/maven').absolutePath
+                systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+            }
+        }
+    }
+}
