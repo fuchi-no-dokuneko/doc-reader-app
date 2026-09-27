@@ -19,6 +19,8 @@ Markdown, Jupyter `.ipynb` / `.ipybn`, DOC/DOCX, XLS/XLSX, PPT/PPTX,
 RTF, CSV, JSON/JSONL, YAML, `.config`, dotfiles and common source languages.
 Office files use a content reading view. Notebooks show cells and saved outputs.
 
+[Edit source · 編輯程式檔 · 编辑源文件](client-android/doc/editing.md): live syntax colors.
+
 支援上述格式、中文編碼偵測與手動選擇。Office 以內容閱讀檢視呈現；
 筆記本顯示儲存格與已保存輸出，程式碼支援上色及結構折疊。
 

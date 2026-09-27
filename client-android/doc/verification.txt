@@ -2,11 +2,14 @@ UT-57 verification / UT-57 驗證
 Command / 指令:
 ./gradlew --offline :client-android:testDebugUnitTest :client-android:assembleDebug :client-android:lintDebug
 
-26 host tests pass; zero failures, errors or skipped tests.
-26 項主機測試通過，無失敗、錯誤或略過。
-Lint: zero errors, 37 warnings about SDK age, inlined constants,
+39 host tests pass; zero failures, errors or skipped tests.
+39 項主機測試通過，無失敗、錯誤或略過。
+Lint: zero errors, 47 warnings about SDK age, inlined constants,
 programmatic-view constructors, style/accessibility suggestions and strings.
-Lint 無錯誤、37 項警告，為 SDK 年代、常數、程式建立的介面、風格與字串等建議。
+Lint 無錯誤、47 項警告，為 SDK 年代、常數、程式建立的介面、風格與字串等建議。
+
+R19–R20 EPUB/editor evidence: epub-editor-verification.txt.
+EPUB 修正與編輯模式的驗證見 epub-editor-verification.txt。
 
 Evidence / 證據:
 R01: PdfTest uses independent PDFium fixtures: plain/split streams, R2/R3/

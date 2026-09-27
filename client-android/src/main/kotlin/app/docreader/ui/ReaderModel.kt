@@ -21,6 +21,7 @@ class ReaderModel(app: Application) : AndroidViewModel(app) {
     val workspace = Workspace(this)
     val loading = BookLoading(this)
     val reading = ReadingActions(this)
+    val editing = Editing(this)
     init {
         scope.launch {
             preferences.settings.collect { settings ->

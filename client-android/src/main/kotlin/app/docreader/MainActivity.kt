@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.*
 import androidx.lifecycle.ViewModelProvider
 import app.docreader.ui.*
@@ -16,12 +15,7 @@ class MainActivity : ComponentActivity() {
     lateinit var model: ReaderModel
     private lateinit var workspace: WorkspaceView
     private val screenScope = CoroutineScope(SupervisorJob()+Dispatchers.Main.immediate)
-    private val folder = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) {
-        if (it != null) FolderAccess.accept(this,it)
-    }
-    private val picker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) it.data?.let { data -> data.data?.let { uri -> model.importFile(uri,data.flags) } }
-    }
+    private val files=DocumentPicker(this)
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
         model = ViewModelProvider(this)[ReaderModel::class.java]
@@ -32,17 +26,16 @@ class MainActivity : ComponentActivity() {
         } }
         onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!model.state.value.home) { model.update { it.copy(home=true) }; model.workspace.save() }
+                if (model.state.value.editor!=null) EditorActions(this@MainActivity,model).close()
+                else if (!model.state.value.home) { model.update { it.copy(home=true) }; model.workspace.save() }
                 else finish()
             }
         })
         if (state == null) accept(intent)
     }
-    fun pick() = picker.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-        type="*/*"; addCategory(Intent.CATEGORY_OPENABLE)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-    })
-    fun pickFolder() = folder.launch(null)
+    fun pick() = files.open()
+    fun pickFolder() = files.folder()
+    fun exportDraft(finish: Boolean) = files.export(finish)
     fun install(view: View) {
         setContentView(view)
         ViewCompat.setOnApplyWindowInsetsListener(view) { v,insets ->

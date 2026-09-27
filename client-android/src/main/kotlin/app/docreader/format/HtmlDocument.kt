@@ -22,9 +22,9 @@ object HtmlDocument {
             if (inHead) return@read
             when {
                 token.tag=="table" || table.active -> { block.flush(); table.token(token) }
-                token.tag=="img" -> {
+                token.tag in setOf("img","image") && !token.closing -> {
                     block.flush(); sink.emit(Block(BlockType.IMAGE,token.attrs["alt"].orEmpty(),
-                        asset=resolve(HtmlTokens.text(token.attrs["src"].orEmpty()))))
+                        asset=resolve(HtmlTokens.text(token.attrs["src"] ?: token.attrs["xlink:href"] ?: token.attrs["href"].orEmpty()))))
                 }
                 token.tag in blocks -> {
                     block.flush()
@@ -36,7 +36,10 @@ object HtmlDocument {
                 }
                 token.tag.isEmpty() -> { block.text.append(token.raw); block.html.append(token.raw) }
                 else -> {
-                    block.html.append(token.raw)
+                    val href=token.attrs["href"]
+                    if (token.tag=="a" && href!=null && prefix.isNotEmpty())
+                        block.html.append("<a href=\"${Markup.escape(XmlFiles.link(prefix,HtmlTokens.text(href)))}\">")
+                    else block.html.append(token.raw)
                     if (token.tag=="br") block.text.append('\n')
                     token.attrs["id"]?.let { block.anchor="$prefix#$it" }
                 }

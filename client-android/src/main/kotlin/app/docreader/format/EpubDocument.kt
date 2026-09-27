@@ -9,7 +9,8 @@ object EpubDocument {
         ZipFile(file).use { zip ->
             val container = zip.getEntry("META-INF/container.xml") ?: error("EPUB container is missing")
             val opfName = XmlFiles.elements(XmlFiles.read(zip.getInputStream(container)), "rootfile")
-                .firstOrNull()?.getAttribute("full-path") ?: error("EPUB package is missing")
+                .let { roots -> roots.firstOrNull { it.getAttribute("media-type")=="application/oebps-package+xml" }
+                    ?: roots.firstOrNull() }?.getAttribute("full-path") ?: error("EPUB package is missing")
             val opf = XmlFiles.read(zip.getInputStream(zip.getEntry(opfName) ?: error("EPUB package is missing")))
             val items = XmlFiles.elements(opf, "item").associateBy { it.getAttribute("id") }
             val styles = CssSheet()
@@ -22,11 +23,11 @@ object EpubDocument {
             require(spine.isNotEmpty()) { "This EPUB has no reading order" }
             for ((index, ref) in spine.withIndex()) {
                 if (Thread.currentThread().isInterrupted) throw InterruptedException()
-                val item = items[ref.getAttribute("idref")] ?: continue
+                val item = items[ref.getAttribute("idref")] ?: error("EPUB chapter ${index+1} is missing from its manifest")
                 val path = XmlFiles.resolve(opfName, item.getAttribute("href"))
-                val entry = zip.getEntry(path) ?: continue
+                val entry = zip.getEntry(path) ?: error("EPUB chapter is missing: $path")
                 sink.emit(Block(BlockType.HEADING, titles[path] ?: "Chapter ${index+1}", 1, anchor = path))
-                zip.getInputStream(entry).bufferedReader().use { reader ->
+                XmlText.reader(zip.getInputStream(entry)).use { reader ->
                     HtmlDocument.parse(reader, sink, { href -> "zip:${file.path}!/${XmlFiles.resolve(path, href)}" }, styles, path)
                 }
             }

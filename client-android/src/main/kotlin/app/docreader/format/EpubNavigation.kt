@@ -9,7 +9,7 @@ object EpubNavigation {
         items.filter { "nav" in it.getAttribute("properties").split(' ') }.forEach { item ->
             val path=XmlFiles.resolve(opf,item.getAttribute("href")); val entry=zip.getEntry(path) ?: return@forEach
             var href=""; val text=StringBuilder()
-            zip.getInputStream(entry).bufferedReader().use { reader -> HtmlTokens.read(reader) { token ->
+            XmlText.reader(zip.getInputStream(entry)).use { reader -> HtmlTokens.read(reader) { token ->
                 if (token.tag=="a") {
                     if (!token.closing) { href=token.attrs["href"].orEmpty(); text.setLength(0) }
                     else if (href.isNotEmpty()) {

@@ -7,7 +7,7 @@ import app.docreader.domain.*
 
 object BlockText {
     fun text(block: Block, dark: Boolean): CharSequence = when {
-        block.type == BlockType.CODE -> Syntax.color(block.text.ifEmpty { " " },dark)
+        block.type == BlockType.CODE -> Syntax.color(block.text.ifEmpty { " " },dark,block.language)
         block.html.isNotEmpty() && block.type != BlockType.TABLE ->
             Html.fromHtml(block.html,Html.FROM_HTML_MODE_COMPACT).trimEnd()
         else -> block.text.ifEmpty { " " }

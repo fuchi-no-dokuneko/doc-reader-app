@@ -31,7 +31,7 @@ object HtmlTokens {
             val attrs = Regex("([\\w:-]+)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))")
                 .findAll(valueText).associate { it.groupValues[1].lowercase() to
                     it.groupValues.drop(2).firstOrNull(String::isNotEmpty).orEmpty() }
-            emit(Token(valueText, name, closing, attrs))
+            emit(Token(valueText, name.substringAfter(':'), closing, attrs))
         }
         if (text.isNotEmpty()) emit(Token(text.toString()))
     }

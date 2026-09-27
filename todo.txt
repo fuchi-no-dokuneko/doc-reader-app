@@ -20,13 +20,14 @@ UT-57 implementation checklist / UT-57 實作清單
 [x] R17 Local processing; Android/AndroidX runtime with Kotlin dependencies
     本機處理、官方平台與 AndroidX，含 Kotlin 執行依賴
 [x] R18 File-manager opening/sharing, APK build and host tests / 外部開檔與建置
+[x] R19 Android EPUB parser fix and reading regressions / EPUB 修正與閱讀回歸
+[x] R20 Distinct edit mode, live syntax colors, save/export / 編輯模式、即時上色與儲存
 
 Verification details: client-android/doc/verification.txt
 驗證與實際測試界線見上列文件。未以實作清單宣稱已完成實機驗收。
 
-Delivery blocker / 交付阻礙:
-GitHub's saved credential returns HTTP 401 Bad credentials.
-The local APK and committed source can be delivered; remote push needs a
-refreshed GitHub login. This is a publishing blocker, not deferred app work.
-GitHub 已存憑證回覆 401；本機 APK 與提交可交付，遠端推送需更新登入。
-此為發布驗證阻礙，並非延後應用程式功能。
+EPUB/editor evidence: client-android/doc/epub-editor-verification.txt
+EPUB 與編輯功能的驗證見上列文件。
+The previous credential failure is resolved; authenticated GitHub API
+access was verified on 2026-09-27. Delivery details are in fan-out/build-report.txt.
+先前憑證問題已解除；2026-09-27 已確認 GitHub 登入，交付狀態見 fan-out 報告。

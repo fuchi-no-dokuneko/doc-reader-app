@@ -9,28 +9,24 @@ class WorkspaceView(private val activity: MainActivity, private val model: Reade
     private var signature = ""
     private var panes = listOf<ReaderPane>()
     private var bars: View? = null
+    private var editor: EditorView? = null
     fun render(state: ReaderState) {
+        state.editor?.let { session ->
+            if (editor?.session !== session) {
+                dispose(); panes=emptyList(); signature=""
+                editor=EditorView(activity,model,session).also { activity.install(it.view) }
+            }
+            editor?.render(); return
+        }
+        if (editor!=null) { editor?.dispose(); editor=null; signature="" }
         val key = listOf(state.home,state.left,state.right,state.active,state.settings,state.importing,
-            state.tabs.map { it.id },state.library.map { it.id }).toString()
+            state.tabs.map { it.id+it.document.id },state.library.map { it.id }).toString()
         if (signature != key) {
             signature = key; panes.forEach(ReaderPane::dispose)
             val ui = UiKit(activity,Palette.forTheme(activity,state.settings.theme))
             activity.setTheme(if (ui.colors.paper == 0xff151b24.toInt()) app.docreader.R.style.ReaderDark else app.docreader.R.style.ReaderLight)
             val root = ui.column().apply { setBackgroundColor(ui.colors.paper) }
-            val header = ui.column(); bars = header
-            if (state.importing) header.addView(ui.text("Importing document…",13f))
-            val tools = ui.row()
-            tools.addView(ui.button("Library") { model.update { it.copy(home=true) }; model.workspace.save() })
-            tools.addView(ui.button("Open",activity::pick))
-            tools.addView(ui.button("Split",model.workspace::split))
-            tools.addView(ui.button("Reading") { ReaderMenus(activity,model,ui).main() })
-            header.addView(HorizontalScrollView(activity).apply { isHorizontalScrollBarEnabled=false; addView(tools) })
-            val tabs = ui.row()
-            state.tabs.forEach { tab ->
-                tabs.addView(ui.button((if (tab.id == state.active) "● " else "")+tab.document.title.take(25)) { model.workspace.select(tab.id) })
-                tabs.addView(ui.button("×") { model.workspace.close(tab.id) }.apply { contentDescription="Close ${tab.document.title}" })
-            }
-            if (state.tabs.isNotEmpty()) header.addView(HorizontalScrollView(activity).apply { addView(tabs) })
+            val header=WorkspaceHeader.create(activity,model,ui,state); bars=header
             root.addView(header)
             if (state.home) { panes=emptyList(); root.addView(LibraryView.create(ui,model,activity::pick),LinearLayout.LayoutParams(-1,0,1f)) }
             else {
@@ -45,5 +41,5 @@ class WorkspaceView(private val activity: MainActivity, private val model: Reade
         }
         panes.forEach { it.render(state) }
     }
-    fun dispose() { panes.forEach(ReaderPane::dispose) }
+    fun dispose() { panes.forEach(ReaderPane::dispose); editor?.dispose() }
 }
