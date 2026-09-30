@@ -44,7 +44,7 @@ done
 "$adb" -s "$serial" install -r "$app_dir/build/outputs/apk/androidTest/debug/client-android-debug-androidTest.apk"
 timeout 300 "$adb" -s "$serial" shell am instrument -w -r \
   app.docreader.test/androidx.test.runner.AndroidJUnitRunner | tee "$evidence/instrumentation.txt"
-rg -q '^OK \([1-9][0-9]* tests?\)' "$evidence/instrumentation.txt"
+grep -Eq '^OK \([1-9][0-9]* tests?\)' "$evidence/instrumentation.txt"
 for fixture in empty styled; do
   "$adb" -s "$serial" exec-out run-as app.docreader cat "files/$fixture.png" > "$evidence/$fixture.png"
 done
