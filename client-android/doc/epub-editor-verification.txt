@@ -38,3 +38,6 @@ numbers, incomplete input, cancellation and a 100,000-character string.
 Build + 39 host tests passed; lint 0 errors / 47 warnings. APK signature verified.
 建置與 39 項主機測試通過，Lint 無錯誤、47 項警告；已驗證 APK 簽章。
 No emulator, adb or physical-device UAT. 未執行模擬器、adb 或實機驗收。
+
+Superseded for Android UAT by android-uat-verification.txt (2026-09-30).
+本報告為歷史紀錄；原生驗證與後續修復請見上述新報告。

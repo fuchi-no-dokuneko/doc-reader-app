@@ -17,12 +17,19 @@ R16 DataStore preferences; Kotlin MVVM/domain-data-UI separation; API 26+.
 DataStore 設定、Kotlin MVVM 分層，以及 Android 8.0 以上。
 R17 Local processing/state; Google platform/AndroidX dependencies only.
 本機處理與保存；使用 Google 平台及 AndroidX 相依套件。
-R18 Friendly picker, external file-manager opening/sharing; build/minimal
-meaningful unit tests; no emulator or adb. APK/report in fan-out.
-友善選擇器、外部開啟／分享、建置與精簡有效測試；不執行模擬器或 adb。
+R18 Friendly picker, external file-manager opening/sharing; host checks plus
+native Android regressions required by the 2026-09-30 repair plan. APK/evidence in fan-out.
+友善選擇器、外部開啟／分享與主機測試；依本次修復計畫加入原生 Android 驗證。
 
 R19 Repair EPUB opening on Android; retain chapters, styles, links and images.
 修復 Android EPUB 開啟，保留章節、樣式、連結及圖片。
 R20 Programming/config files enter an edit mode with visibly different colors,
 live syntax highlighting, save/export and unsaved-change handling.
 程式／設定檔可進入不同配色的編輯模式，支援即時上色、儲存／匯出與未存變更處理。
+
+R21 Stable source identities, separate content revisions, atomic snapshot replacement
+with rollback on database failure, and Room v1-to-v2 migration preserving saved data.
+來源識別與內容版本分離；資料庫失敗時還原快照，升級時保留既有閱讀資料。
+R22 Reimports/saves refresh shared tabs; copies move only the edited tab;
+conflict detection uses the editor's starting revision even after reimport.
+重新匯入及儲存更新共用分頁；副本僅移動編輯分頁，衝突依編輯起始版本判斷。

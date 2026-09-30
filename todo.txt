@@ -22,6 +22,8 @@ UT-57 implementation checklist / UT-57 實作清單
 [x] R18 File-manager opening/sharing, APK build and host tests / 外部開檔與建置
 [x] R19 Android EPUB parser fix and reading regressions / EPUB 修正與閱讀回歸
 [x] R20 Distinct edit mode, live syntax colors, save/export / 編輯模式、即時上色與儲存
+[x] R21 Stable source IDs, revision caches, migration and rollback / 來源識別、版本快取與升級
+[x] R22 Shared-tab refresh, isolated copies and captured conflicts / 分頁更新、副本與衝突
 
 Verification details: client-android/doc/verification.txt
 驗證與實際測試界線見上列文件。未以實作清單宣稱已完成實機驗收。
@@ -31,3 +33,6 @@ EPUB 與編輯功能的驗證見上列文件。
 The previous credential failure is resolved; authenticated GitHub API
 access was verified on 2026-09-27. Delivery details are in fan-out/build-report.txt.
 先前憑證問題已解除；2026-09-27 已確認 GitHub 登入，交付狀態見 fan-out 報告。
+
+Android UAT repair evidence: client-android/doc/android-uat-verification.txt
+本次原生 Android 驗證、來源隔離及資料升級證據見上列文件。

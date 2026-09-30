@@ -31,6 +31,19 @@ Ubuntu 系統套件腳本為選用，須由管理員檢閱後手動以 sudo 執�
 Ubuntu 系统软件包脚本为可选项，须由管理员检查后手动用 sudo 执行，本次未执行。
 以上命令不需要模拟器或 adb。
 
+Native release gate · 原生發布驗證 · 原生发布验证:
+
+```bash
+./gradlew :client-android:assembleDebug :client-android:assembleDebugAndroidTest
+./client-android/test-native.sh
+```
+
+The gate creates a dedicated Android 9 emulator without sudo and saves logs/screenshots
+in `fan-out/native`. Set `DOC_READER_NATIVE_SERIAL=emulator-5580` to reuse that test emulator.
+CI and releases require the picker, CSS/HTML, external intent and Room migration checks.
+發布驗證使用專用 Android 9 模擬器，保存紀錄與畫面；CI 及發布均須通過。
+发布验证使用专用 Android 9 模拟器，保存记录与画面；CI 及发布均须通过。
+
 References · 參考 · 参考:
 
 - [Android build compatibility](https://developer.android.com/build/releases/agp-9-2-0-release-notes)
