@@ -8,6 +8,8 @@ on:
 permissions:
   contents: read
 jobs:
+  native:
+    uses: ./.github/workflows/android-native.yml
   verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 20

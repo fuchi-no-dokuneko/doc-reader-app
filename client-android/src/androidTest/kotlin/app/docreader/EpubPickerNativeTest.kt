@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EpubPickerNativeTest {
     @Test fun documentPickerImportsEmptyAndExternalStylesheets() {
+        NativeAccess.automation
         ActivityScenario.launch(MainActivity::class.java).use { activity ->
             for (name in listOf("empty","styled")) {
                 NativeUi.click("Open")
@@ -39,6 +40,7 @@ class EpubPickerNativeTest {
                     if (name=="styled") assertTrue((0 until blocks.count).any { "italic" in blocks.block(it).style })
                 }
             }
+            NativeOpenWith.verify(activity)
         }
     }
 }

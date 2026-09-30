@@ -3,6 +3,8 @@ android {
     sourceSets.androidTest.assets.srcDir 'schemas'
 }
 dependencies {
+    // Instrumentation shares the app runtime; Room's schema reader needs the 1.8 ABI.
+    implementation platform('org.jetbrains.kotlinx:kotlinx-serialization-bom:1.8.1')
     androidTestImplementation 'androidx.test:runner:1.7.0'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
     androidTestImplementation 'androidx.test:core:1.7.0'

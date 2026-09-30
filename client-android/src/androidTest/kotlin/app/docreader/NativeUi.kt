@@ -15,19 +15,19 @@ object NativeUi {
             if (condition()) return
             SystemClock.sleep(250)
         }
-        error("$message; visible: "+nodes(instrumentation.uiAutomation.rootInActiveWindow).mapNotNull { it.text })
+        error("$message; visible: "+nodes(NativeAccess.root()).mapNotNull { it.text })
     }
     fun nodes(node: AccessibilityNodeInfo?): List<AccessibilityNodeInfo> {
         if (node==null) return emptyList()
         return listOf(node)+(0 until node.childCount).flatMap { nodes(node.getChild(it)) }
     }
-    fun visible(text: String) = nodes(instrumentation.uiAutomation.rootInActiveWindow)
+    fun visible(text: String) = nodes(NativeAccess.root())
         .any { it.text?.toString()?.contains(text)==true && it.isVisibleToUser }
     fun click(label: String) {
         android.util.Log.i("NativeUi","Finding $label")
-        instrumentation.uiAutomation.waitForIdle(800,10000)
+        NativeAccess.automation.waitForIdle(800,10000)
         waitFor("Cannot click $label") {
-            val node=nodes(instrumentation.uiAutomation.rootInActiveWindow).lastOrNull {
+            val node=nodes(NativeAccess.root()).lastOrNull {
                 it.isVisibleToUser && (it.text?.toString()==label ||
                     it.contentDescription?.toString()?.contains(label)==true)
             }
@@ -38,12 +38,12 @@ object NativeUi {
                     val event=MotionEvent.obtain(time,SystemClock.uptimeMillis(),action,
                         bounds.exactCenterX(),bounds.exactCenterY(),0)
                     event.source=InputDevice.SOURCE_TOUCHSCREEN
-                    check(instrumentation.uiAutomation.injectInputEvent(event,true))
+                    check(NativeAccess.automation.injectInputEvent(event,true))
                     event.recycle(); SystemClock.sleep(60)
                 }
                 android.util.Log.i("NativeUi","Tapped $label")
                 SystemClock.sleep(1000)
-                instrumentation.uiAutomation.waitForIdle(800,10000)
+                NativeAccess.automation.waitForIdle(800,10000)
                 true
             }
         }
