@@ -16,7 +16,7 @@ object BookLayout {
         }
         val old = runtime.job
         val generation = ++runtime.generation
-        val tab = model.tab(id) ?: return
+        if (model.tab(id)==null) return
         runtime.job = model.scope.launch {
             if (old != currentCoroutineContext()[Job]) old?.cancelAndJoin()
             model.change(id) { it.copy(busy="Laying out pages…") }
@@ -26,9 +26,11 @@ object BookLayout {
                 } }
                 if (generation != runtime.generation) return@launch
                 val pages = book.pages ?: return@launch
-                val page = if (tab.position.anchor > 0) pages.find(tab.position.anchor)
-                    else tab.position.page.coerceIn(0,pages.count-1)
-                model.change(id) { it.copy(busy="",count=pages.count,position=it.position.copy(page=page),revision=it.revision+1) }
+                model.change(id) { tab ->
+                    val page = if (tab.position.anchor > 0) pages.find(tab.position.anchor)
+                        else tab.position.page.coerceIn(0,pages.count-1)
+                    tab.copy(busy="",count=pages.count,position=tab.position.copy(page=page),revision=tab.revision+1)
+                }
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) { model.change(id) { it.copy(busy="",error=e.message ?: "Pagination failed") } }
         }
