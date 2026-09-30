@@ -9,7 +9,7 @@ import java.io.File
 import java.security.MessageDigest
 
 class DocumentImport(private val context: Context, private val repo: LocalRepository) {
-    suspend fun open(uri: Uri, flags: Int = 0): DocumentInfo {
+    suspend fun open(uri: Uri, flags: Int = 0, retainId: String? = null): DocumentInfo {
         val resolver = context.contentResolver
         if (flags and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION != 0) runCatching {
             resolver.takePersistableUriPermission(uri, flags and
@@ -31,13 +31,10 @@ class DocumentImport(private val context: Context, private val repo: LocalReposi
                     digest.update(buffer,0,n); out.write(buffer,0,n)
                 }
             } } ?: error("The file provider could not open this document")
-            val id = digest.digest().joinToString("") { "%02x".format(it) }
+            val hash = FileHash.hex(digest.digest())
             val kind = Formats.detect(title,resolver.getType(uri))
             validate(temporary,kind)
-            val destination = repo.file(id)
-            if (!destination.exists()) check(temporary.renameTo(destination)) { "Could not save document" }
-            val info = DocumentInfo(id,title,kind,destination.length(),uri.toString())
-            repo.remember(info); return info
+            return ImportCommit.apply(repo,temporary,uri.toString(),title,kind,hash,retainId)
         } finally { temporary.delete() }
     }
     private fun validate(file: File, kind: Kind) {

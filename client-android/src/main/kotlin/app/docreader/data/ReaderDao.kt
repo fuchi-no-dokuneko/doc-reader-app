@@ -4,8 +4,12 @@ import androidx.room.*
 
 @Dao
 interface ReaderDao {
-    @Query("SELECT * FROM documents ORDER BY opened DESC")
+    @Query("SELECT * FROM documents ORDER BY opened DESC, id ASC")
     suspend fun documents(): List<DocumentRow>
+    @Query("SELECT * FROM documents WHERE source=:source ORDER BY opened DESC, id ASC LIMIT 1")
+    suspend fun source(source: String): DocumentRow?
+    @Query("SELECT * FROM documents WHERE id=:id")
+    suspend fun document(id: String): DocumentRow?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun document(row: DocumentRow)
     @Query("DELETE FROM documents WHERE id = :id") suspend fun deleteDocument(id: String)
@@ -23,5 +27,5 @@ interface ReaderDao {
 }
 
 @Database(entities = [DocumentRow::class, PositionRow::class, MarkRow::class],
-    version = 1, exportSchema = true)
+    version = 2, exportSchema = true)
 abstract class ReaderDatabase : RoomDatabase() { abstract fun reader(): ReaderDao }

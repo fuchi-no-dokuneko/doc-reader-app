@@ -1,0 +1,36 @@
+Source identity and revision contract / 來源識別與內容版本 · 2026-09-30
+
+New sources receive UUIDs. Lookup uses the exact persisted URI string.
+The same URI retains its ID; different URIs remain distinct even with equal
+names and bytes. URI aliases are intentionally separate sources.
+新來源使用 UUID；相同原始 URI 保留識別碼，不同 URI 即使同名同內容也各自獨立。
+
+Room v2 appends contentHash. The explicit migration retains every existing ID,
+position and mark. Legacy 64-hex IDs initialize the revision hash; other empty
+hashes are computed from the saved snapshot when first opened. Workspace and
+encoding references remain valid. Historical duplicate URIs select newest opened,
+then ascending ID; older rows are retained.
+升級保留全部舊識別碼、位置及標記，工作區與編碼參照不變；其他雜湊於首次開啟計算。
+歷史重複來源以最近開啟時間、再依識別碼選取，不會刪除較舊紀錄。
+
+Imports stream into staging files. A shared repository lock serializes source
+lookup and commit. The previous snapshot remains backed up until Room succeeds;
+a failed upsert restores it. Staging files never become library rows.
+共用鎖保護來源查詢與提交；資料庫更新成功前保留備份，失敗時還原原快照。
+
+Each reader opens an immutable revision snapshot. Parsed caches include hash,
+format and encoding in a new namespace. Old revisions remain available to live
+readers and are removed with the document's cache when it leaves the library.
+閱讀器使用固定版本快照；解析快取含雜湊、格式與編碼，移除文件時一併刪除。
+
+Reimport and Save refresh all tabs for that source while retaining their places.
+Save retains the ID and bookmarks. Save a copy moves the edited tab to its
+destination; other source tabs and saved marks remain. A changed provider file
+conflicts with the editor's captured starting hash, even after reimport.
+重新匯入與儲存更新同來源分頁且保留位置；另存副本保留原來源的其他分頁及標記。
+即使重新匯入，外部修改仍與編輯開始時的版本比較，衝突時保留草稿與外部內容。
+
+An old hash collision already overwrote the earlier source descriptor. Migration
+preserves the surviving row and marks; reimport the missing source to restore it
+as an independent library document.
+舊版碰撞已覆寫的來源無法推測還原；請重新匯入遺失來源，既存紀錄與標記仍會保留。

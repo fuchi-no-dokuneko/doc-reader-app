@@ -7,7 +7,9 @@ import java.io.File
 object BlockIndex {
     @Synchronized fun open(file: File, info: DocumentInfo, encoding: String, cache: File,
         resolve: (String) -> String): Pair<DiskBlocks,String> {
-        val directory = File(cache, "text-v2-${encoding.hashCode()}-${info.kind.name}")
+        val revision=info.contentHash.ifEmpty { FileHash.of(file) }
+        val charset=java.net.URLEncoder.encode(encoding,"UTF-8")
+        val directory = File(cache, "text-v3-$revision-${info.kind.name}-$charset")
         val marker = File(directory,"ready")
         if (!marker.exists()) {
             directory.deleteRecursively(); directory.mkdirs()

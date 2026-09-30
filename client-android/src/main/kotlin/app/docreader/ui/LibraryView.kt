@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.view.*
 import android.widget.*
 import app.docreader.domain.DocumentInfo
-import kotlinx.coroutines.*
 
 object LibraryView {
     fun create(ui: UiKit, model: ReaderModel, pick: () -> Unit): View {
@@ -40,10 +39,7 @@ object LibraryView {
         AlertDialog.Builder(ui.context).setTitle(doc.title)
             .setItems(arrayOf("Open in a new tab","Remove from library")) { _,which ->
                 if (which == 0) model.workspace.open(doc)
-                else model.scope.launch {
-                    model.state.value.tabs.filter { it.document.id == doc.id }.forEach { model.workspace.close(it.id) }
-                    withContext(Dispatchers.IO) { model.repo.remove(doc.id) }; model.refresh()
-                }
+                else LibraryActions.remove(model,doc.id)
             }.setNegativeButton("Cancel",null).show()
     }
 }

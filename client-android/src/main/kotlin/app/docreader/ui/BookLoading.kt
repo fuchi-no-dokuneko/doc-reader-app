@@ -1,12 +1,9 @@
 package app.docreader.ui
 
 import app.docreader.domain.*
-import app.docreader.data.BlockIndex
-import app.docreader.render.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.withLock
-import java.io.File
 
 class BookLoading(private val model: ReaderModel) {
     fun start(id: String, password: String? = null) {
@@ -20,21 +17,10 @@ class BookLoading(private val model: ReaderModel) {
             try {
                 val position = model.repo.position(tab.document.id,id)
                 val encoding = model.preferences.encoding(tab.document.id).first()
-                withContext(Dispatchers.IO) { runtime.mutex.withLock {
-                    runInterruptible {
-                        runtime.close()
-                        val file = model.repo.file(tab.document.id)
-                        if (tab.document.kind == Kind.PDF) runtime.pdf = PdfBook(file,password)
-                        else {
-                            val cache = model.repo.cache(tab.document.id)
-                            val (blocks,detected) = BlockIndex.open(file,tab.document,encoding,cache) {
-                                model.assets.resolve(tab.document.source,it)
-                            }
-                            runtime.text = TextBook(blocks,detected,File(cache,"layout-$id"),model.assets)
-                        }
-                    }
-                } }
-                model.change(id) { it.copy(position=position,encoding=runtime.text?.encoding ?: "PDF",
+                val document=withContext(Dispatchers.IO) {
+                    OpenBook.load(model,runtime,id,tab.document,encoding,password)
+                }
+                model.change(id) { it.copy(document=document,position=position,encoding=runtime.text?.encoding ?: "PDF",
                     count=runtime.pdf?.count ?: 0,busy=if (runtime.text != null) "Preparing pages…" else "") }
                 runtime.layout?.let { layout(id,it,true) }
             } catch (e: CancellationException) { throw e }

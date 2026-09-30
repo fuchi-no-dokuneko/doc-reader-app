@@ -2,24 +2,29 @@ package app.docreader.data
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.withTransaction
 import app.docreader.domain.*
 import java.io.File
+import kotlinx.coroutines.sync.withLock
 
-class LocalRepository(context: Context) : DocumentRepository {
+class LocalRepository(context: Context, name: String = "reader.db") : DocumentRepository {
     val files = File(context.filesDir, "documents").apply { mkdirs() }
     val derived = File(context.cacheDir, "reading").apply { mkdirs() }
+    val importLock = RepositoryLocks.forDirectory(files)
     private val db = Room.databaseBuilder(context.applicationContext,
-        ReaderDatabase::class.java, "reader.db").build()
+        ReaderDatabase::class.java, name).addMigrations(ReaderMigrations.V1_V2).build()
     private val dao = db.reader()
-    override suspend fun documents() = dao.documents().map {
-        DocumentInfo(it.id, it.title, Kind.valueOf(it.kind), it.size, it.source, it.opened)
-    }
+    override suspend fun documents() = dao.documents().map { it.info() }
+    suspend fun document(id: String) = dao.document(id)?.info()
+    suspend fun source(uri: String) = dao.source(uri)?.info()
+    suspend fun snapshot(info: DocumentInfo) = RevisionSnapshot.open(this,info)
     override suspend fun remember(document: DocumentInfo) {
-        with(document) { dao.document(DocumentRow(id, title, kind.name, size, source, opened)) }
+        with(document) { dao.document(DocumentRow(id,title,kind.name,size,source,opened,contentHash)) }
     }
-    override suspend fun remove(id: String) {
-        dao.deleteMarks(id); dao.deletePositions(id); dao.deleteDocument(id)
+    override suspend fun remove(id: String) = importLock.withLock {
+        db.withTransaction { dao.deleteMarks(id); dao.deletePositions(id); dao.deleteDocument(id) }
         file(id).delete(); File(derived, id).deleteRecursively()
+        Unit
     }
     override suspend fun position(document: String, tab: String): ReadingPosition {
         val row = dao.position(document, tab) ?: dao.position(document, "last")
