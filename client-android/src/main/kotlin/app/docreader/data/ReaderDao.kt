@@ -23,5 +23,5 @@ interface ReaderDao {
 }
 
 @Database(entities = [DocumentRow::class, PositionRow::class, MarkRow::class],
-    version = 1, exportSchema = false)
+    version = 1, exportSchema = true)
 abstract class ReaderDatabase : RoomDatabase() { abstract fun reader(): ReaderDao }
