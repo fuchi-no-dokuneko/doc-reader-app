@@ -12,7 +12,10 @@ adb="$ANDROID_HOME/platform-tools/adb"
 serial="${DOC_READER_NATIVE_SERIAL:-emulator-5580}"
 emulator_pid=''
 cleanup() {
+  result=$?
+  "$app_dir/native-evidence.sh" "$adb" "$serial" "$evidence" || true
   if [ -n "$emulator_pid" ]; then kill "$emulator_pid" 2>/dev/null || true; fi
+  return "$result"
 }
 trap cleanup EXIT
 if [ -z "${DOC_READER_NATIVE_SERIAL:-}" ]; then
@@ -28,7 +31,9 @@ if [ -z "${DOC_READER_NATIVE_SERIAL:-}" ]; then
   fi
   acceleration=off
   if [ -r /dev/kvm ] && [ -w /dev/kvm ]; then acceleration=on; fi
+  sed -i 's/^hw.lcd.density=.*/hw.lcd.density=160/' "$ANDROID_AVD_HOME/docreader-api28.avd/config.ini"
   "$ANDROID_HOME/emulator/emulator" -avd docreader-api28 -port 5580 -accel "$acceleration" \
+    -skin 480x800 \
     -no-window -no-audio -no-boot-anim -no-snapshot -no-metrics -gpu swiftshader_indirect \
     -feature -Vulkan -memory 1536 -cores 2 -dns-server 8.8.8.8 > "$evidence/emulator.log" 2>&1 &
   emulator_pid=$!
@@ -38,6 +43,9 @@ for attempt in {1..240}; do
   if [ "$attempt" = 240 ]; then echo 'Android did not boot.' >&2; exit 1; fi
   sleep 2
 done
+for setting in window_animation_scale transition_animation_scale animator_duration_scale; do
+  "$adb" -s "$serial" shell settings put global "$setting" 0
+done
 "$adb" -s "$serial" shell input keyevent KEYCODE_WAKEUP
 "$adb" -s "$serial" shell wm dismiss-keyguard
 "$adb" -s "$serial" install -r "$app_dir/build/outputs/apk/debug/client-android-debug.apk"
@@ -45,6 +53,3 @@ done
 timeout 300 "$adb" -s "$serial" shell am instrument -w -r \
   app.docreader.test/androidx.test.runner.AndroidJUnitRunner | tee "$evidence/instrumentation.txt"
 grep -Eq '^OK \([1-9][0-9]* tests?\)' "$evidence/instrumentation.txt"
-for fixture in empty styled; do
-  "$adb" -s "$serial" exec-out run-as app.docreader cat "files/$fixture.png" > "$evidence/$fixture.png"
-done

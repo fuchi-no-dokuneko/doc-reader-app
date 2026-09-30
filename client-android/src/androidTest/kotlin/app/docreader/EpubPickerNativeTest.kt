@@ -12,12 +12,7 @@ class EpubPickerNativeTest {
         NativeAccess.automation
         ActivityScenario.launch(MainActivity::class.java).use { activity ->
             for (name in listOf("empty","styled")) {
-                NativeUi.click("Open")
-                if (!NativeUi.visible("$name.epub")) {
-                    NativeUi.click("Show roots")
-                    NativeUi.click("Doc Reader fixtures")
-                }
-                NativeUi.click("$name.epub")
+                PickerUi.open("$name.epub")
                 NativeUi.waitFor("EPUB did not paginate: $name") {
                     var ready=false
                     activity.onActivity { screen ->

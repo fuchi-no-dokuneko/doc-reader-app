@@ -26,26 +26,28 @@ object NativeUi {
     fun click(label: String) {
         android.util.Log.i("NativeUi","Finding $label")
         NativeAccess.automation.waitForIdle(800,10000)
-        waitFor("Cannot click $label") {
-            val node=nodes(NativeAccess.root()).lastOrNull {
-                it.isVisibleToUser && (it.text?.toString()==label ||
-                    it.contentDescription?.toString()?.contains(label)==true)
-            }
-            if (node==null) false else {
-                val bounds=Rect(); node.getBoundsInScreen(bounds)
-                val time=SystemClock.uptimeMillis()
-                for (action in listOf(MotionEvent.ACTION_DOWN,MotionEvent.ACTION_UP)) {
-                    val event=MotionEvent.obtain(time,SystemClock.uptimeMillis(),action,
-                        bounds.exactCenterX(),bounds.exactCenterY(),0)
-                    event.source=InputDevice.SOURCE_TOUCHSCREEN
-                    check(NativeAccess.automation.injectInputEvent(event,true))
-                    event.recycle(); SystemClock.sleep(60)
-                }
-                android.util.Log.i("NativeUi","Tapped $label")
-                SystemClock.sleep(1000)
-                NativeAccess.automation.waitForIdle(800,10000)
-                true
+        waitFor("Cannot click $label") { tryClick(label) }
+    }
+    fun tryClick(label: String): Boolean {
+        val node=nodes(NativeAccess.root()).lastOrNull {
+            it.isVisibleToUser && (it.text?.toString()==label ||
+                it.contentDescription?.toString()?.contains(label)==true)
+        } ?: return false
+        var target: AccessibilityNodeInfo?=node
+        while (target!=null && !target.isClickable) target=target.parent
+        if (target?.performAction(AccessibilityNodeInfo.ACTION_CLICK)!=true) {
+            val bounds=Rect(); node.getBoundsInScreen(bounds)
+            val time=SystemClock.uptimeMillis()
+            for (action in listOf(MotionEvent.ACTION_DOWN,MotionEvent.ACTION_UP)) {
+                val event=MotionEvent.obtain(time,SystemClock.uptimeMillis(),action,
+                    bounds.exactCenterX(),bounds.exactCenterY(),0)
+                event.source=InputDevice.SOURCE_TOUCHSCREEN
+                check(NativeAccess.automation.injectInputEvent(event,true))
+                event.recycle(); SystemClock.sleep(60)
             }
         }
+        android.util.Log.i("NativeUi","Clicked $label")
+        SystemClock.sleep(500)
+        return true
     }
 }
