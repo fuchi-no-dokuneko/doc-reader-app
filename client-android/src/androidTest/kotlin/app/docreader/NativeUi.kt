@@ -9,9 +9,15 @@ import androidx.test.platform.app.InstrumentationRegistry
 
 object NativeUi {
     val instrumentation get()=InstrumentationRegistry.getInstrumentation()
+    private var waitedForSystemUi=false
     fun waitFor(message: String,condition: () -> Boolean) {
         val limit=SystemClock.uptimeMillis()+120000
         while (SystemClock.uptimeMillis()<limit) {
+            // A cold software emulator can show one System UI startup ANR.
+            if (!waitedForSystemUi && visible("System UI isn't responding")) {
+                waitedForSystemUi=tryClick("Wait")
+                android.util.Log.i("NativeUi","Waited for System UI startup: $waitedForSystemUi")
+            }
             if (condition()) return
             SystemClock.sleep(250)
         }
