@@ -12,10 +12,45 @@ permissions:
   contents: write
 
 jobs:
+  metadata:
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Check out source and tags
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Resolve and guard release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(sed -nE "s/^[[:space:]]*versionName[[:space:]]+'([^']+)'.*/\1/p" client-android/build.gradle)
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Could not resolve a semantic versionName from client-android/build.gradle." >&2
+            exit 1
+          fi
+          tag="v$version"
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$tag" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match Android versionName $version." >&2
+            exit 1
+          fi
+          if git rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
+            tagged_commit=$(git rev-list -n 1 "$tag")
+            if [ "$tagged_commit" != "$GITHUB_SHA" ]; then
+              echo "$tag already belongs to $tagged_commit; bump versionName and versionCode before merging." >&2
+              exit 1
+            fi
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
   native:
+    needs: metadata
     uses: ./.github/workflows/android-native.yml
   release:
-    needs: native
+    needs: [metadata, native]
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
@@ -59,18 +94,23 @@ jobs:
           ./gradlew :client-android:testDebugUnitTest :client-android:lintDebug :client-android:assembleRelease :client-android:bundleRelease
       - name: Prepare release files
         shell: bash
+        env:
+          RELEASE_VERSION: ${{ needs.metadata.outputs.tag }}
         run: ./client-android/prepare-release.sh
       - name: Upload build artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: doc-reader-release-${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+          name: doc-reader-release-${{ needs.metadata.outputs.tag }}
           path: release/
           if-no-files-found: error
           retention-days: 30
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
+          tag_name: ${{ needs.metadata.outputs.tag }}
+          name: ${{ needs.metadata.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: release/*
           fail_on_unmatched_files: true
           generate_release_notes: true
+          make_latest: true

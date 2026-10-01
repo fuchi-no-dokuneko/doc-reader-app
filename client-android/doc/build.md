@@ -41,6 +41,11 @@ Native release gate · 原生發布驗證 · 原生发布验证:
 The gate creates a dedicated Android 9 emulator without sudo and saves logs/screenshots
 in `fan-out/native`. Set `DOC_READER_NATIVE_SERIAL=emulator-5580` to reuse that test emulator.
 CI and releases require the picker, CSS/HTML, external intent and Room migration checks.
+
+Every successful push to `main` now publishes the signed APK and AAB as the
+GitHub Release named by `versionName`. Each merged release must increment both
+`versionName` and `versionCode`; the workflow stops before building if that tag
+already belongs to an older commit.
 發布驗證使用專用 Android 9 模擬器，保存紀錄與畫面；CI 及發布均須通過。
 发布验证使用专用 Android 9 模拟器，保存记录与画面；CI 及发布均须通过。
 
