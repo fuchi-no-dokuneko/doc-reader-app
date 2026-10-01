@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Process
 import java.io.File
-import java.security.MessageDigest
 
 object SourceWrite {
     fun canWrite(context: Context, source: String): Boolean {
@@ -14,11 +13,11 @@ object SourceWrite {
         return uri.scheme=="content" && context.checkUriPermission(uri,Process.myPid(),Process.myUid(),
             Intent.FLAG_GRANT_WRITE_URI_PERMISSION)==PackageManager.PERMISSION_GRANTED
     }
-    fun write(context: Context,uri: Uri,bytes: ByteArray,expected: File? = null) {
+    fun write(context: Context,uri: Uri,bytes: ByteArray,expectedHash: String? = null) {
         val resolver=context.contentResolver
-        if (expected!=null) {
-            val actual=resolver.openInputStream(uri)?.use(::digest)
-            require(actual!=null && expected.inputStream().use(::digest).contentEquals(actual)) {
+        if (expectedHash!=null) {
+            val actual=resolver.openInputStream(uri)?.use(FileHash::read)
+            require(expectedHash.isNotEmpty() && actual==expectedHash) {
                 "The original file changed outside Doc Reader. Use Save a copy to keep both versions."
             }
         }
@@ -33,10 +32,5 @@ object SourceWrite {
             runCatching { resolver.takePersistableUriPermission(uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
         }
-    }
-    private fun digest(input: java.io.InputStream): ByteArray {
-        val digest=MessageDigest.getInstance("SHA-256"); val buffer=ByteArray(65536)
-        while (true) { val n=input.read(buffer); if (n<0) break; digest.update(buffer,0,n) }
-        return digest.digest()
     }
 }

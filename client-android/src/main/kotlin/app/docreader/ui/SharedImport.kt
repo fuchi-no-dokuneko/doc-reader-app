@@ -8,9 +8,11 @@ import kotlinx.coroutines.*
 object SharedImport {
     fun open(model: ReaderModel, text: String) = model.scope.launch {
         val file = withContext(Dispatchers.IO) {
-            File(model.getApplication<Application>().cacheDir,"Shared text.txt").apply { writeText(text) }
+            val directory=File(model.getApplication<Application>().cacheDir,
+                "shared-text/${java.util.UUID.randomUUID()}").apply { mkdirs() }
+            File(directory,"Shared text.txt").apply { writeText(text) }
         }
-        model.importFile(Uri.fromFile(file)).join()
-        withContext(Dispatchers.IO) { file.delete() }
+        try { model.importFile(Uri.fromFile(file)).join() }
+        finally { withContext(NonCancellable+Dispatchers.IO) { file.parentFile?.deleteRecursively() } }
     }
 }

@@ -1,0 +1,43 @@
+Android UAT repair verification / Android 驗收修復驗證 · 2026-09-30
+Version / 版本: 1.0.2 (3), minimum Android 8.0/API 26
+
+Baseline / 修正前:
+23b5f49: Android 9 reproduced PatternSyntaxException for both CSS/HTML tests.
+The reconstructed UatIsolationTest reproduced first.py changing its tab title
+to second.py after saving an identical-content second source.
+原生測試重現 CSS 語法例外；活動測試重現同內容來源互相覆寫分頁名稱。
+
+Passed / 已通過:
+53 host tests, zero failures/skips. Lint: zero errors, 42 warnings.
+Four instrumentation tests on the dedicated Android 9/API 28 x86_64 emulator.
+No physical device was used; host results are reported separately.
+53 項主機測試及四項 Android 9 原生測試通過；Lint 無錯誤、42 項警告。
+未使用實體裝置；主機與原生測試結果分別列示。
+
+The system picker imported empty.epub and styled.epub from a DocumentsProvider.
+Both paginated and displayed chapter/body text; styled text retained italics.
+An actual VIEW intent reopened the imported EPUB. Android resolved Doc Reader
+for PDF, EPUB, JSON, YAML, notebooks, source/text and generic application MIME types.
+系統選擇器實際匯入兩個 EPUB，均有頁數與可見章節，並驗證斜體樣式及外部開啟。
+
+Native migration: exported v1 schema creates document/position/mark records;
+v2 preserves IDs, marks, positions, workspace and encoding references. Reimport
+keeps the legacy ID. A non-hash legacy ID resolves its hash on first access.
+原生升級測試保留識別碼、位置、標記、工作區及編碼；重新匯入仍使用舊識別碼。
+
+Host Activity regressions cover identical-source isolation after recreation,
+separate marks/encodings, stable Save with two refreshed tabs, copy rebinding
+only one tab, repeated changed/unchanged imports, retained reading positions,
+outside-edit conflicts after reimport, removal isolation and old live caches.
+Concurrent importers share an ID for one URI; equal names/bytes at two URIs do not.
+A real SQLite abort trigger verifies restoration after failed snapshot commits.
+Repeated plain-text shares use distinct temporary URIs and remain separate documents.
+Pending pagination uses the latest restored position when its work completes.
+主機活動回歸涵蓋分頁、編碼、標記、另存、重匯、衝突、移除與快取隔離；
+亦驗證並行匯入及真實 SQLite 拒絕提交時的快照還原。
+背景分頁完成時保留最新還原位置，避免舊任務覆寫頁碼。
+
+CI runs the native gate for pull requests; release builds depend on it.
+Evidence: fan-out/native/; before/after diagnostics: fan-out/uat/.
+Contract: source-identity.txt. Commands: build.md.
+CI 與發布均須通過原生驗證；交付證據及操作方式如上。

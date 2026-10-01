@@ -11,7 +11,8 @@ data class ReadingSettings(
     val encoding: String = "Auto", val jump: Int = 10
 )
 data class DocumentInfo(val id: String, val title: String, val kind: Kind,
-    val size: Long, val source: String = "", val opened: Long = System.currentTimeMillis())
+    val size: Long, val source: String = "", val opened: Long = System.currentTimeMillis(),
+    val contentHash: String = "")
 data class ReadingPosition(val page: Int = 0, val offset: Int = 0, val anchor: Long = 0)
 data class Chapter(val title: String, val block: Int, val level: Int = 1)
 data class Mark(val id: Long = 0, val document: String, val page: Int,

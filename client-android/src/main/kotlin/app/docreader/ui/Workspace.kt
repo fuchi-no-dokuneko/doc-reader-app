@@ -2,8 +2,7 @@ package app.docreader.ui
 
 import app.docreader.domain.*
 import java.util.UUID
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.launch
 import org.json.*
 
 class Workspace(private val model: ReaderModel) {
@@ -32,19 +31,7 @@ class Workspace(private val model: ReaderModel) {
             else { open(tab.document); model.update { it.copy(left=tab.id,right=it.active) } }
         }; save()
     }
-    fun close(id: String) {
-        model.engines.remove(id)?.let { r ->
-            model.scope.launch(Dispatchers.IO) {
-                r.job?.cancelAndJoin(); r.searchJob?.cancelAndJoin(); r.mutex.withLock { r.close() }
-            }
-        }
-        model.update { s ->
-            val tabs = s.tabs.filterNot { it.id == id }; val next = tabs.firstOrNull()?.id
-            s.copy(tabs=tabs,left=if (s.left == id) s.right ?: next else s.left,
-                right=if (s.right == id || s.left == id) null else s.right,
-                active=if (s.active == id) next else s.active,home=tabs.isEmpty())
-        }; save()
-    }
+    fun close(id: String) = ClosedTabs.close(model,id)
     fun save() {
         if (restoring) return
         val json=WorkspaceCodec.encode(model.state.value)

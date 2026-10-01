@@ -18,6 +18,7 @@ class ReaderModel(app: Application) : AndroidViewModel(app) {
     private val mutable = MutableStateFlow(ReaderState())
     val state = mutable.asStateFlow()
     val engines = mutableMapOf<String,TabRuntime>()
+    val tabUpdates = kotlinx.coroutines.sync.Mutex()
     val workspace = Workspace(this)
     val loading = BookLoading(this)
     val reading = ReadingActions(this)
@@ -49,7 +50,8 @@ class ReaderModel(app: Application) : AndroidViewModel(app) {
         update { it.copy(importing = true) }
         try {
             val info = withContext(Dispatchers.IO) { DocumentImport(getApplication(),repo).open(uri,flags) }
-            refresh(); workspace.open(info)
+            workspace.open(TabRefresh.apply(this@ReaderModel,info))
+        } catch (e: CancellationException) { throw e
         } catch (e: Exception) { message(e.message ?: "Unable to open file") }
         finally { update { it.copy(importing = false) } }
     }

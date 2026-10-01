@@ -12,7 +12,10 @@ permissions:
   contents: write
 
 jobs:
+  native:
+    uses: ./.github/workflows/android-native.yml
   release:
+    needs: native
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
@@ -56,21 +59,11 @@ jobs:
           ./gradlew :client-android:testDebugUnitTest :client-android:lintDebug :client-android:assembleRelease :client-android:bundleRelease
       - name: Prepare release files
         shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p release
-          apk=(client-android/build/outputs/apk/release/*.apk)
-          bundle=(client-android/build/outputs/bundle/release/*.aab)
-          test "${#apk[@]}" -eq 1
-          test "${#bundle[@]}" -eq 1
-          version="${GITHUB_REF_NAME//\//-}"
-          cp "${apk[0]}" "release/doc-reader-${version}-signed.apk"
-          cp "${bundle[0]}" "release/doc-reader-${version}-signed.aab"
-          (cd release && sha256sum ./*.apk ./*.aab > SHA256SUMS.txt)
+        run: ./client-android/prepare-release.sh
       - name: Upload build artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: doc-reader-release-${{ github.ref_name }}
+          name: doc-reader-release-${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
           path: release/
           if-no-files-found: error
           retention-days: 30

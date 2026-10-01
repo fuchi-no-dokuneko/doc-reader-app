@@ -3,6 +3,7 @@ android {
         unitTests.includeAndroidResources = true
         unitTests.all {
             inputs.file('src/main/AndroidManifest.xml')
+            inputs.dir('src/androidTest/assets')
             forkEvery = 1
             maxParallelForks = 2
             def epub = System.getenv('DOC_READER_EPUB')

@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.*
 import org.robolectric.annotation.Config
 import java.io.File
+import kotlinx.coroutines.runBlocking
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk=[35])
@@ -19,7 +20,10 @@ class EditorSaveAsTest {
             val activity=controller.get(); val model=activity.model
             assertSame("ViewModel application",activity.application,model.getApplication<android.app.Application>())
             model.repo.file("read-only").writeText("name: before\n")
-            model.workspace.open(DocumentInfo("read-only","settings.yaml",Kind.YAML,13))
+            val doc=DocumentInfo("read-only","settings.yaml",Kind.YAML,13)
+            runBlocking { model.repo.remember(doc) }
+            model.workspace.open(doc)
+            UiHarness.ready(activity); model.workspace.split()
             UiHarness.ready(activity); UiHarness.edit(activity)
             val field=UiHarness.field(activity); field.setText("name: after\n")
             UiHarness.button(activity,"Save").performClick()
@@ -38,6 +42,9 @@ class EditorSaveAsTest {
             assertEquals("name: after\n",output.readText())
             assertEquals("name: before\n",model.repo.file("read-only").readText())
             assertEquals(output.toURI().path,Uri.parse(model.state.value.editor!!.document.source).path)
+            assertEquals(2,model.state.value.library.size)
+            assertEquals(1,model.state.value.tabs.count { it.document.id==doc.id })
+            assertNotEquals(doc.id,model.tab(model.state.value.editor!!.tab)!!.document.id)
         }
     }
 }

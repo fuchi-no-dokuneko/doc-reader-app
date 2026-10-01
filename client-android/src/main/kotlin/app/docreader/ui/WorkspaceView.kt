@@ -20,7 +20,7 @@ class WorkspaceView(private val activity: MainActivity, private val model: Reade
         }
         if (editor!=null) { editor?.dispose(); editor=null; signature="" }
         val key = listOf(state.home,state.left,state.right,state.active,state.settings,state.importing,
-            state.tabs.map { it.id+it.document.id },state.library.map { it.id }).toString()
+            state.tabs.map { it.id to it.document },state.library).toString()
         if (signature != key) {
             signature = key; panes.forEach(ReaderPane::dispose)
             val ui = UiKit(activity,Palette.forTheme(activity,state.settings.theme))
